@@ -1,0 +1,143 @@
+.material-details-page {
+    min-height: calc(100vh - 72px);
+    background-color: var(--bg-surface);
+}
+
+.material-details-container {
+    max-width: 1050px;
+    margin: 0 auto;
+    padding: 60px 32px 100px;
+}
+
+.back-link {
+    display: inline-block;
+    margin-bottom: 48px;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+    .back-link:hover {
+        color: var(--text-primary);
+    }
+
+.material-heading {
+    max-width: 760px;
+    padding-bottom: 50px;
+}
+
+.material-details-subject {
+    margin: 0 0 14px;
+    color: var(--accent);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+}
+
+.material-heading h1 {
+    margin: 0 0 20px;
+    font-size: clamp(38px, 5vw, 56px);
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.035em;
+}
+
+.material-details-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    color: var(--text-muted);
+    font-size: 13px;
+}
+
+.material-description {
+    padding: 40px 0;
+    border-top: 1px solid var(--border-subtle);
+}
+
+    .material-description h2,
+    .study-tools-heading h2 {
+        margin: 0 0 14px;
+        font-size: 21px;
+        font-weight: 600;
+    }
+
+    .material-description p {
+        max-width: 680px;
+        margin: 0;
+        color: var(--text-secondary);
+        line-height: 1.7;
+    }
+
+.study-tools {
+    padding-top: 40px;
+    border-top: 1px solid var(--border-subtle);
+}
+
+.study-tools-heading {
+    margin-bottom: 32px;
+}
+
+    .study-tools-heading p {
+        margin: 0;
+        color: var(--text-secondary);
+    }
+
+.study-tool-list {
+    border-top: 1px solid var(--border-subtle);
+}
+
+.study-tool {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 30px;
+    padding: 24px 0;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+    .study-tool h3 {
+        margin: 0 0 6px;
+        font-size: 17px;
+        font-weight: 600;
+    }
+
+    .study-tool p {
+        margin: 0;
+        color: var(--text-secondary);
+        font-size: 14px;
+    }
+
+    .study-tool button {
+        flex-shrink: 0;
+        padding: 9px 15px;
+        border: 1px solid var(--border-strong);
+        border-radius: 3px;
+        background-color: transparent;
+        color: var(--text-muted);
+    }
+
+        .study-tool button:disabled {
+            cursor: not-allowed;
+            opacity: 0.55;
+        }
+
+.tools-note {
+    margin-top: 20px;
+    color: var(--text-muted);
+    font-size: 12px;
+}
+
+.material-not-found {
+    padding: 80px 8%;
+}
+
+@media (max-width: 700px) {
+    .material-details-container {
+        padding: 45px 24px 70px;
+    }
+
+    .study-tool {
+        align-items: flex-start;
+    }
+}
