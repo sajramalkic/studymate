@@ -1,0 +1,18 @@
+# Visual Studio
+.vs/
+
+# .NET
+bin/
+obj/
+
+# Node
+node_modules/
+dist/
+
+# Environment variables
+.env
+.env.*
+
+# OS
+.DS_Store
+Thumbs.db
