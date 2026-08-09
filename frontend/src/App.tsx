@@ -5,6 +5,7 @@ import HomePage from "./pages/HomePage";
 import LibraryPage from "./pages/LibraryPage";
 import LoginPage from "./pages/LoginPage";
 import MaterialDetailsPage from "./pages/MaterialDetailsPage";
+import RegisterPage from "./pages/RegisterPage";
 
 function App() {
     return (
@@ -18,6 +19,10 @@ function App() {
                 <Route
                     path="/materijal/:id"
                     element={<MaterialDetailsPage />}
+                />
+                <Route
+                    path="/registracija"
+                    element={<RegisterPage />}
                 />
             </Routes>
         </BrowserRouter>

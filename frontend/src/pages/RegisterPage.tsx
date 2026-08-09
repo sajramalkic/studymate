@@ -2,22 +2,30 @@
 import { Link } from "react-router-dom";
 import "../styles/Auth.css";
 
-function LoginPage() {
+function RegisterPage() {
+    const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
+    const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
 
     function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
         event.preventDefault();
 
-        if (!email || !password) {
-            setError("Unesi email i lozinku.");
+        if (!username || !email || !password || !confirmPassword) {
+            setError("Sva polja su obavezna.");
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            setError("Lozinke se ne podudaraju.");
             return;
         }
 
         setError("");
 
         console.log({
+            username,
             email,
             password,
         });
@@ -27,11 +35,26 @@ function LoginPage() {
         <main className="auth-page">
             <div className="auth-container">
                 <div className="auth-heading">
-                    <h1>Prijava</h1>
+                    <h1>Kreiraj račun</h1>
                    
                 </div>
 
                 <form className="auth-form" onSubmit={handleSubmit}>
+                    <div className="form-field">
+                        <label htmlFor="username">
+                            Korisničko ime
+                        </label>
+
+                        <input
+                            id="username"
+                            type="text"
+                            value={username}
+                            onChange={(event) =>
+                                setUsername(event.target.value)
+                            }
+                        />
+                    </div>
+
                     <div className="form-field">
                         <label htmlFor="email">
                             Email
@@ -62,6 +85,21 @@ function LoginPage() {
                         />
                     </div>
 
+                    <div className="form-field">
+                        <label htmlFor="confirm-password">
+                            Potvrdi lozinku
+                        </label>
+
+                        <input
+                            id="confirm-password"
+                            type="password"
+                            value={confirmPassword}
+                            onChange={(event) =>
+                                setConfirmPassword(event.target.value)
+                            }
+                        />
+                    </div>
+
                     {error && (
                         <p className="form-error">
                             {error}
@@ -72,14 +110,14 @@ function LoginPage() {
                         type="submit"
                         className="auth-submit-button"
                     >
-                        Prijavi se
+                        Registruj se
                     </button>
                 </form>
 
                 <p className="auth-switch">
-                    Nemaš račun?{" "}
-                    <Link to="/registracija">
-                        Registruj se
+                    Već imaš račun?{" "}
+                    <Link to="/prijava">
+                        Prijavi se
                     </Link>
                 </p>
             </div>
@@ -87,4 +125,4 @@ function LoginPage() {
     );
 }
 
-export default LoginPage;
+export default RegisterPage;
