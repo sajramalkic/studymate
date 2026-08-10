@@ -95,3 +95,9 @@
         .auth-switch a:hover {
             text-decoration: underline;
         }
+
+.field-help {
+    color: var(--text-muted);
+    font-size: 12px;
+    line-height: 1.4;
+}

@@ -1,34 +1,119 @@
 ﻿import { useState } from "react";
-import { Link } from "react-router-dom";
+import {
+    Link,
+    useNavigate,
+} from "react-router-dom";
+import { register } from "../services/authService";
 import "../styles/Auth.css";
 
 function RegisterPage() {
+    const navigate = useNavigate();
+
     const [username, setUsername] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [confirmPassword, setConfirmPassword] = useState("");
-    const [error, setError] = useState("");
+    const [confirmPassword, setConfirmPassword] =
+        useState("");
 
-    function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    const [error, setError] = useState("");
+    const [submitting, setSubmitting] =
+        useState(false);
+
+    async function handleSubmit(
+        event: React.FormEvent<HTMLFormElement>
+    ) {
         event.preventDefault();
 
-        if (!username || !email || !password || !confirmPassword) {
+        const cleanUsername = username.trim();
+        const cleanEmail =
+            email.trim().toLowerCase();
+
+        if (
+            !cleanUsername ||
+            !cleanEmail ||
+            !password ||
+            !confirmPassword
+        ) {
             setError("Sva polja su obavezna.");
             return;
         }
 
-        if (password !== confirmPassword) {
-            setError("Lozinke se ne podudaraju.");
+        const usernameRegex =
+            /^[A-Za-z0-9._]{3,30}$/;
+
+        if (!usernameRegex.test(cleanUsername)) {
+            setError(
+                "Korisničko ime mora imati između 3 i 30 znakova " +
+                "i može sadržavati samo slova, brojeve, tačku i donju crtu."
+            );
             return;
         }
 
-        setError("");
+        const emailRegex =
+            /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        console.log({
-            username,
-            email,
-            password,
-        });
+        if (!emailRegex.test(cleanEmail)) {
+            setError("Unesi ispravan email.");
+            return;
+        }
+
+        if (password.length < 8) {
+            setError(
+                "Lozinka mora imati najmanje 8 znakova."
+            );
+            return;
+        }
+
+        if (!/[A-Z]/.test(password)) {
+            setError(
+                "Lozinka mora sadržavati najmanje jedno veliko slovo."
+            );
+            return;
+        }
+
+        if (!/[a-z]/.test(password)) {
+            setError(
+                "Lozinka mora sadržavati najmanje jedno malo slovo."
+            );
+            return;
+        }
+
+        if (!/[0-9]/.test(password)) {
+            setError(
+                "Lozinka mora sadržavati najmanje jedan broj."
+            );
+            return;
+        }
+
+        if (password !== confirmPassword) {
+            setError(
+                "Lozinke se ne podudaraju."
+            );
+            return;
+        }
+
+        try {
+            setSubmitting(true);
+            setError("");
+
+            await register({
+                username: cleanUsername,
+                email: cleanEmail,
+                password,
+            });
+
+            navigate("/prijava");
+        } catch (error) {
+            if (error instanceof Error) {
+                setError(error.message);
+            } else {
+                setError(
+                    "Registracija nije uspjela."
+                );
+            }
+        } finally {
+            setSubmitting(false);
+        }
     }
 
     return (
@@ -36,10 +121,13 @@ function RegisterPage() {
             <div className="auth-container">
                 <div className="auth-heading">
                     <h1>Kreiraj račun</h1>
-                   
                 </div>
 
-                <form className="auth-form" onSubmit={handleSubmit}>
+                <form
+                    className="auth-form"
+                    onSubmit={handleSubmit}
+                    noValidate
+                >
                     <div className="form-field">
                         <label htmlFor="username">
                             Korisničko ime
@@ -50,9 +138,18 @@ function RegisterPage() {
                             type="text"
                             value={username}
                             onChange={(event) =>
-                                setUsername(event.target.value)
+                                setUsername(
+                                    event.target.value
+                                )
                             }
+                            autoComplete="username"
+                            maxLength={30}
                         />
+
+                        <span className="field-help">
+                            3–30 znakova · slova,
+                            brojevi, . i _
+                        </span>
                     </div>
 
                     <div className="form-field">
@@ -65,8 +162,11 @@ function RegisterPage() {
                             type="email"
                             value={email}
                             onChange={(event) =>
-                                setEmail(event.target.value)
+                                setEmail(
+                                    event.target.value
+                                )
                             }
+                            autoComplete="email"
                         />
                     </div>
 
@@ -80,9 +180,17 @@ function RegisterPage() {
                             type="password"
                             value={password}
                             onChange={(event) =>
-                                setPassword(event.target.value)
+                                setPassword(
+                                    event.target.value
+                                )
                             }
+                            autoComplete="new-password"
                         />
+
+                        <span className="field-help">
+                            Najmanje 8 znakova,
+                            veliko i malo slovo te broj
+                        </span>
                     </div>
 
                     <div className="form-field">
@@ -95,8 +203,11 @@ function RegisterPage() {
                             type="password"
                             value={confirmPassword}
                             onChange={(event) =>
-                                setConfirmPassword(event.target.value)
+                                setConfirmPassword(
+                                    event.target.value
+                                )
                             }
+                            autoComplete="new-password"
                         />
                     </div>
 
@@ -109,8 +220,11 @@ function RegisterPage() {
                     <button
                         type="submit"
                         className="auth-submit-button"
+                        disabled={submitting}
                     >
-                        Registruj se
+                        {submitting
+                            ? "Registracija..."
+                            : "Registruj se"}
                     </button>
                 </form>
 

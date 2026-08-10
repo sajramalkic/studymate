@@ -13,6 +13,9 @@ dist/
 .env
 .env.*
 
+# Uploaded materials
+backend/Uploads/
+
 # OS
 .DS_Store
 Thumbs.db

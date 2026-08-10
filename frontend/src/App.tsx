@@ -6,6 +6,10 @@ import LibraryPage from "./pages/LibraryPage";
 import LoginPage from "./pages/LoginPage";
 import MaterialDetailsPage from "./pages/MaterialDetailsPage";
 import RegisterPage from "./pages/RegisterPage";
+import CreateMaterialPage from "./pages/CreateMaterialPage";
+import ProfilePage from "./pages/ProfilePage";
+import ProtectedRoute from "./components/ProtectedRoute";
+import MyMaterialsPage from "./pages/MyMaterialsPage";
 
 function App() {
     return (
@@ -23,6 +27,30 @@ function App() {
                 <Route
                     path="/registracija"
                     element={<RegisterPage />}
+                />
+                <Route
+                    path="/dodaj-materijal"
+                    element={
+                        <ProtectedRoute>
+                            <CreateMaterialPage />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/profil"
+                    element={
+                        <ProtectedRoute>
+                            <ProfilePage />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/moji-materijali"
+                    element={
+                        <ProtectedRoute>
+                            <MyMaterialsPage />
+                        </ProtectedRoute>
+                    }
                 />
             </Routes>
         </BrowserRouter>

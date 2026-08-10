@@ -6,13 +6,11 @@ function HomePage() {
         <main className="home-page">
             <section className="hero">
                 <div className="hero-content">
-                    <p className="hero-eyebrow">Platforma za učenje</p>
 
                     <h1>Učenje počinje dobrim materijalom.</h1>
 
                     <p className="hero-description">
-                        Kreiraj pitanja, sažetke i kartice iz vlastitih
-                        materijala ili pronađi ono što su podijelili drugi studenti.
+                        Kreiraj pitanja, sažetke i kartice ili pronađi ono što su podijelili drugi.
                     </p>
 
                     <div className="hero-actions">
@@ -73,7 +71,7 @@ function HomePage() {
                         <div>
                             <h3>Kvizovi</h3>
                             <p>
-                                Provjeri koliko si gradiva zaista usvojila.
+                                Provjeri koliko si gradiva zaista usvojio.
                             </p>
                         </div>
                     </div>

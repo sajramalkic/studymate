@@ -51,3 +51,20 @@
         gap: 16px;
     }
 }
+.logout-button {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--text-secondary);
+    font: inherit;
+    cursor: pointer;
+}
+
+    .logout-button:hover {
+        color: var(--text-primary);
+    }
+
+.profile-link {
+    color: var(--text-primary);
+    font-weight: 600;
+}

@@ -1,22 +1,58 @@
-﻿import { useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { materials } from "../data/materials";
+import type { Material } from "../types/Material";
+import { getMaterials } from "../services/materialService";
 import "../styles/LibraryPage.css";
 
 function LibraryPage() {
+    const [materials, setMaterials] = useState<Material[]>([]);
     const [search, setSearch] = useState("");
-    const [subject, setSubject] = useState("Svi");
+
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState("");
+
+    useEffect(() => {
+        async function loadMaterials() {
+            try {
+                const data = await getMaterials();
+                setMaterials(data);
+            } catch {
+                setError("Došlo je do greške pri učitavanju materijala.");
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        loadMaterials();
+    }, []);
 
     const filteredMaterials = materials.filter((material) => {
-        const matchesSearch =
-            material.title.toLowerCase().includes(search.toLowerCase()) ||
-            material.subject.toLowerCase().includes(search.toLowerCase());
+        const searchValue = search.toLowerCase();
 
-        const matchesSubject =
-            subject === "Svi" || material.subject === subject;
-
-        return matchesSearch && matchesSubject;
+        return (
+            material.title.toLowerCase().includes(searchValue) ||
+            material.subject.toLowerCase().includes(searchValue)
+        );
     });
+    if (loading) {
+        return (
+            <main className="library-page">
+                <section className="library-content">
+                    <p>Učitavanje materijala...</p>
+                </section>
+            </main>
+        );
+    }
+
+    if (error) {
+        return (
+            <main className="library-page">
+                <section className="library-content">
+                    <p>{error}</p>
+                </section>
+            </main>
+        );
+    }
 
     return (
         <main className="library-page">
@@ -25,6 +61,13 @@ function LibraryPage() {
             <section className="library-content">
                 <div className="library-title-row">
                     <h1>Biblioteka</h1>
+
+                    <Link
+                        to="/dodaj-materijal"
+                        className="add-material-link"
+                    >
+                        Dodaj materijal
+                    </Link>
                 </div>
                 <div className="library-controls">
                     <input
@@ -33,23 +76,6 @@ function LibraryPage() {
                         value={search}
                         onChange={(event) => setSearch(event.target.value)}
                     />
-
-                    <select
-                        value={subject}
-                        onChange={(event) => setSubject(event.target.value)}
-                    >
-                        <option value="Svi">Svi predmeti</option>
-                        <option value="Računarske mreže">
-                            Računarske mreže
-                        </option>
-                        <option value="Matematika">Matematika</option>
-                        <option value="Arhitektura računara">
-                            Arhitektura računara
-                        </option>
-                        <option value="Baze podataka">
-                            Baze podataka
-                        </option>
-                    </select>
                 </div>
 
                 <div className="library-result-header">
@@ -78,6 +104,12 @@ function LibraryPage() {
                                     <span>{material.type}</span>
                                     <span>·</span>
                                     <span>{material.pages} stranica</span>
+                                    <span>·</span>
+                                    <span>
+                                        {material.files?.length === 1
+                                            ? "1 fajl"
+                                            : `${material.files?.length ?? 0} fajlova`}
+                                    </span>
                                     <span>·</span>
                                     <span>{material.author}</span>
                                 </div>

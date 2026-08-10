@@ -1,26 +1,48 @@
 ﻿import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { login } from "../services/authService";
+import { useAuth } from "../context/AuthContext";
 import "../styles/Auth.css";
 
 function LoginPage() {
+    const navigate = useNavigate();
+
+    const { refreshUser } = useAuth();
+
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
+    const [submitting, setSubmitting] = useState(false);
 
-    function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    async function handleSubmit(
+        event: React.FormEvent<HTMLFormElement>
+    ) {
         event.preventDefault();
 
-        if (!email || !password) {
+        if (!email.trim() || !password) {
             setError("Unesi email i lozinku.");
             return;
         }
 
-        setError("");
+        try {
+            setSubmitting(true);
+            setError("");
 
-        console.log({
-            email,
-            password,
-        });
+            await login({
+                email: email.trim(),
+                password,
+            });
+
+            // Nakon uspješne prijave ponovo učitavamo
+            // trenutno prijavljenog korisnika.
+            await refreshUser();
+
+            navigate("/");
+        } catch {
+            setError("Email ili lozinka nisu ispravni.");
+        } finally {
+            setSubmitting(false);
+        }
     }
 
     return (
@@ -28,10 +50,13 @@ function LoginPage() {
             <div className="auth-container">
                 <div className="auth-heading">
                     <h1>Prijava</h1>
-                   
                 </div>
 
-                <form className="auth-form" onSubmit={handleSubmit}>
+                <form
+                    className="auth-form"
+                    onSubmit={handleSubmit}
+                    noValidate
+                >
                     <div className="form-field">
                         <label htmlFor="email">
                             Email
@@ -44,6 +69,7 @@ function LoginPage() {
                             onChange={(event) =>
                                 setEmail(event.target.value)
                             }
+                            autoComplete="email"
                         />
                     </div>
 
@@ -59,20 +85,32 @@ function LoginPage() {
                             onChange={(event) =>
                                 setPassword(event.target.value)
                             }
+                            autoComplete="current-password"
                         />
                     </div>
 
                     {error && (
-                        <p className="form-error">
-                            {error}
-                        </p>
+                        <div className="form-error">
+                            <p>{error}</p>
+
+                            <p>
+                                Ako nemaš račun,{" "}
+                                <Link to="/registracija">
+                                    registruj se
+                                </Link>
+                                .
+                            </p>
+                        </div>
                     )}
 
                     <button
                         type="submit"
                         className="auth-submit-button"
+                        disabled={submitting}
                     >
-                        Prijavi se
+                        {submitting
+                            ? "Prijava..."
+                            : "Prijavi se"}
                     </button>
                 </form>
 

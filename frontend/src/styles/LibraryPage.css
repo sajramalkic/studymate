@@ -8,6 +8,10 @@
 }
 
 .library-title-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
     margin-bottom: 28px;
 }
 
@@ -16,6 +20,20 @@
         font-size: 32px;
         font-weight: 600;
         letter-spacing: -0.025em;
+    }
+
+.add-material-link {
+    padding: 10px 16px;
+    border: 1px solid var(--accent);
+    border-radius: 3px;
+    background-color: var(--accent);
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+    .add-material-link:hover {
+        background-color: var(--accent-hover);
     }
 
 .library-controls {
