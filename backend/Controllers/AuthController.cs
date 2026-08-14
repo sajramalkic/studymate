@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using StudyMate.Api.Dtos;
 using StudyMate.Api.Models;
+using StudyMate.Api.Services;
 
 namespace StudyMate.Api.Controllers;
 
@@ -14,13 +15,18 @@ public class AuthController : ControllerBase
 {
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly SignInManager<ApplicationUser> _signInManager;
-
+    private readonly IEmailService _emailService;
+    private readonly ILogger<AuthController> _logger;
     public AuthController(
         UserManager<ApplicationUser> userManager,
-        SignInManager<ApplicationUser> signInManager)
+        SignInManager<ApplicationUser> signInManager,
+        IEmailService emailService,
+        ILogger<AuthController> logger)
     {
         _userManager = userManager;
         _signInManager = signInManager;
+        _emailService = emailService;
+        _logger = logger;
     }
 
     // POST: api/auth/register
@@ -176,6 +182,26 @@ public class AuthController : ControllerBase
                 message =
                     "Email ili lozinka nisu ispravni."
             });
+        }
+        if (!string.IsNullOrWhiteSpace(user.Email))
+        {
+            try
+            {
+                await _emailService
+                    .SendLoginNotificationAsync(
+                        user.Email,
+                        user.UserName,
+                        HttpContext.RequestAborted
+                    );
+            }
+            catch (Exception exception)
+            {
+                _logger.LogError(
+                    exception,
+                    "Nije poslana obavijest o prijavi za korisnika {UserId}.",
+                    user.Id
+                );
+            }
         }
 
         return Ok(new

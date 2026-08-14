@@ -16,9 +16,9 @@
     font-size: 14px;
 }
 
-    .back-link:hover {
-        color: var(--text-primary);
-    }
+.back-link:hover {
+    color: var(--text-primary);
+}
 
 /* Naslov materijala */
 
@@ -44,6 +44,12 @@
     letter-spacing: -0.035em;
 }
 
+.material-uploader {
+    margin: 0 0 12px;
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
 .material-details-meta {
     display: flex;
     flex-wrap: wrap;
@@ -59,19 +65,19 @@
     border-top: 1px solid var(--border-subtle);
 }
 
-    .material-description h2,
-    .study-tools-heading h2 {
-        margin: 0 0 14px;
-        font-size: 21px;
-        font-weight: 600;
-    }
+.material-description h2,
+.study-tools-heading h2 {
+    margin: 0 0 14px;
+    font-size: 21px;
+    font-weight: 600;
+}
 
-    .material-description p {
-        max-width: 680px;
-        margin: 0;
-        color: var(--text-secondary);
-        line-height: 1.7;
-    }
+.material-description p {
+    max-width: 680px;
+    margin: 0;
+    color: var(--text-secondary);
+    line-height: 1.7;
+}
 
 /* Fajlovi */
 
@@ -88,17 +94,17 @@
     margin-bottom: 24px;
 }
 
-    .material-files-heading h2 {
-        margin: 0;
-        font-size: 21px;
-        font-weight: 600;
-    }
+.material-files-heading h2 {
+    margin: 0;
+    font-size: 21px;
+    font-weight: 600;
+}
 
-    .material-files-heading p {
-        margin: 0;
-        color: var(--text-muted);
-        font-size: 13px;
-    }
+.material-files-heading p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 13px;
+}
 
 .material-files-list {
     display: flex;
@@ -120,17 +126,17 @@
     gap: 30px;
 }
 
-    .material-file-heading h3 {
-        margin: 0 0 6px;
-        font-size: 15px;
-        font-weight: 600;
-    }
+.material-file-heading h3 {
+    margin: 0 0 6px;
+    font-size: 15px;
+    font-weight: 600;
+}
 
-    .material-file-heading p {
-        margin: 0;
-        color: var(--text-muted);
-        font-size: 12px;
-    }
+.material-file-heading p {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 12px;
+}
 
 .material-file-actions {
     display: flex;
@@ -146,10 +152,10 @@
     font-weight: 600;
 }
 
-    .file-action-button:hover {
-        border-color: var(--accent);
-        color: var(--accent);
-    }
+.file-action-button:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
 
 /* Preview slike */
 
@@ -157,13 +163,13 @@
     margin-top: 20px;
 }
 
-    .file-preview img {
-        display: block;
-        max-width: 100%;
-        max-height: 650px;
-        object-fit: contain;
-        border: 1px solid var(--border-subtle);
-    }
+.file-preview img {
+    display: block;
+    max-width: 100%;
+    max-height: 650px;
+    object-fit: contain;
+    border: 1px solid var(--border-subtle);
+}
 
 /* Preview PDF-a */
 
@@ -173,11 +179,11 @@
     border: 1px solid var(--border-subtle);
 }
 
-    .pdf-preview iframe {
-        width: 100%;
-        height: 100%;
-        border: 0;
-    }
+.pdf-preview iframe {
+    width: 100%;
+    height: 100%;
+    border: 0;
+}
 
 /* Alati za učenje */
 
@@ -190,54 +196,471 @@
     margin-bottom: 32px;
 }
 
-    .study-tools-heading p {
-        margin: 0;
-        color: var(--text-secondary);
-    }
+.study-tools-heading p {
+    margin: 0;
+    color: var(--text-secondary);
+}
 
 .study-tool-list {
+    display: flex;
+    flex-direction: column;
     border-top: 1px solid var(--border-subtle);
 }
 
 .study-tool {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 30px;
-    padding: 24px 0;
+    display: block;
+    padding: 26px 0;
     border-bottom: 1px solid var(--border-subtle);
 }
 
-    .study-tool h3 {
-        margin: 0 0 6px;
-        font-size: 17px;
-        font-weight: 600;
-    }
+.study-tool-row {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 32px;
+}
 
-    .study-tool p {
-        margin: 0;
-        color: var(--text-secondary);
-        font-size: 14px;
-    }
+.study-tool-row > div:first-child {
+    flex: 1;
+}
 
-    .study-tool button {
-        flex-shrink: 0;
-        padding: 9px 15px;
-        border: 1px solid var(--border-strong);
-        border-radius: 3px;
-        background-color: transparent;
-        color: var(--text-muted);
-    }
+.study-tool-row h3 {
+    margin: 0 0 7px;
+    color: var(--text-primary);
+    font-size: 18px;
+    font-weight: 600;
+}
 
-        .study-tool button:disabled {
-            cursor: not-allowed;
-            opacity: 0.55;
-        }
+.study-tool-row p {
+    margin: 0;
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.55;
+}
+
+.study-tool-row > button {
+    flex-shrink: 0;
+    min-width: 100px;
+    padding: 10px 16px;
+    border: 1px solid var(--border-strong);
+    border-radius: 5px;
+    background: var(--bg-surface);
+    color: var(--text-secondary);
+    font: inherit;
+    font-size: 14px;
+    cursor: pointer;
+    transition:
+        border-color 0.15s ease,
+        color 0.15s ease,
+        background 0.15s ease;
+}
+
+.study-tool-row > button:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+}
+
+.study-tool-row > button:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+}
+
+.study-tool-expandable.open {
+    padding-bottom: 30px;
+}
+
+.study-tool-expandable .summary-generator,
+.study-tool-expandable .question-generator,
+.study-tool-expandable .flashcard-generator,
+.study-tool-expandable .quiz-generator {
+    margin-top: 22px;
+    padding-top: 22px;
+    border-top: 1px solid var(--border-subtle);
+}
 
 .tools-note {
     margin-top: 20px;
     color: var(--text-muted);
     font-size: 12px;
+}
+
+/* Izbor izvora */
+
+.source-options {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.source-option {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: fit-content;
+    color: var(--text-primary);
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.source-option input[type="radio"] {
+    width: 16px;
+    height: 16px;
+    margin: 0;
+    accent-color: var(--accent);
+    cursor: pointer;
+}
+
+.source-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    max-width: 520px;
+    margin: 2px 0 6px 26px;
+    padding: 16px;
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    background: var(--bg-main);
+}
+
+.source-fields label {
+    color: var(--text-secondary);
+    font-size: 13px;
+    font-weight: 600;
+}
+
+.source-fields input,
+.source-fields select {
+    width: 100%;
+    box-sizing: border-box;
+    padding: 10px 12px;
+    border: 1px solid var(--border-subtle);
+    border-radius: 5px;
+    background: var(--bg-surface);
+    color: var(--text-primary);
+    font: inherit;
+    font-size: 14px;
+}
+
+.source-fields input:focus,
+.source-fields select:focus {
+    outline: none;
+    border-color: var(--accent);
+}
+
+.page-range {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-top: 4px;
+}
+
+.page-range > div {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+}
+
+.source-note {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+/* Komentari */
+
+
+.comment-section {
+    padding: 40px 0;
+    border-top: 1px solid var(--border-subtle);
+}
+
+.comment-heading {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+    .comment-heading h2 {
+        margin: 0;
+        font-size: 24px;
+        font-weight: 600;
+    }
+
+    .comment-heading span {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        min-width: 28px;
+        height: 28px;
+        box-sizing: border-box;
+        padding: 0 8px;
+        border-radius: 999px;
+        background-color: var(--bg-main);
+        color: var(--text-muted);
+        font-size: 13px;
+    }
+
+    .comment-replying-to {
+    margin: 10px 0 0 !important;
+    color: var(--text-muted) !important;
+    font-size: 12px !important;
+    line-height: 1.4 !important;
+}
+
+.comment-replying-to strong {
+    color: var(--accent);
+    font-weight: 600;
+}
+
+.comment-deleted {
+    margin: 14px 0 0 !important;
+    color: var(--text-muted) !important;
+    font-size: 14px !important;
+    font-style: italic;
+}
+/* Forma za novi komentar */
+
+.comment-form {
+    max-width: 680px;
+    margin-bottom: 28px;
+    padding: 18px;
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    background-color: var(--bg-surface);
+}
+
+    .comment-form textarea,
+    .comment-edit-form textarea,
+    .comment-reply-form textarea {
+        display: block;
+        width: 100%;
+        box-sizing: border-box;
+        padding: 12px 14px;
+        border: 1px solid var(--border-subtle);
+        border-radius: 6px;
+        background-color: var(--bg-surface);
+        color: var(--text-primary);
+        font: inherit;
+        font-size: 14px;
+        line-height: 1.5;
+        resize: vertical;
+    }
+
+    .comment-form textarea {
+        min-height: 110px;
+    }
+
+.comment-edit-form textarea,
+.comment-reply-form textarea {
+    min-height: 85px;
+}
+
+    .comment-form textarea:focus,
+    .comment-edit-form textarea:focus,
+    .comment-reply-form textarea:focus {
+        outline: none;
+        border-color: var(--accent);
+    }
+
+    .comment-form textarea::placeholder,
+    .comment-edit-form textarea::placeholder,
+    .comment-reply-form textarea::placeholder {
+        color: var(--text-muted);
+    }
+
+/* Donji dio forme */
+
+.comment-form-footer,
+.comment-reply-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 12px;
+}
+
+    .comment-form-footer span,
+    .comment-reply-footer span {
+        color: var(--text-muted);
+        font-size: 12px;
+    }
+
+    .comment-form-footer button,
+    .comment-reply-footer button {
+        padding: 9px 18px;
+        border: 1px solid var(--accent);
+        border-radius: 5px;
+        background-color: var(--accent);
+        color: white;
+        font: inherit;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: opacity 0.15s ease, transform 0.15s ease;
+    }
+
+        .comment-form-footer button:hover:not(:disabled),
+        .comment-reply-footer button:hover:not(:disabled) {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+
+        .comment-form-footer button:disabled,
+        .comment-reply-footer button:disabled {
+            cursor: not-allowed;
+            opacity: 0.55;
+        }
+
+/* Lista komentara */
+
+.comment-list {
+    display: grid;
+    gap: 16px;
+    max-width: 760px;
+}
+
+.comment-thread {
+    display: block;
+    min-width: 0;
+}
+
+.comment-item {
+    padding: 18px;
+    border: 1px solid var(--border-subtle);
+    border-radius: 8px;
+    background-color: var(--bg-surface);
+}
+
+.comment-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+}
+
+    .comment-meta strong {
+        color: var(--text-primary);
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+.comment-date {
+    color: var(--text-muted);
+    font-size: 12px;
+    font-weight: 400;
+    white-space: nowrap;
+}
+
+.comment-content,
+.comment-item > p {
+    margin: 14px 0 0;
+    color: var(--text-secondary);
+    font-size: 14px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+}
+
+/* Dugmad */
+
+.comment-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 14px;
+}
+
+    .comment-actions button {
+        padding: 7px 13px;
+        border: 1px solid var(--border-strong);
+        border-radius: 5px;
+        background-color: transparent;
+        color: var(--text-secondary);
+        font: inherit;
+        font-size: 12px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: border-color 0.15s ease, color 0.15s ease, background-color 0.15s ease;
+    }
+
+        .comment-actions button:hover:not(:disabled) {
+            border-color: var(--accent);
+            background-color: var(--bg-main);
+            color: var(--accent);
+        }
+
+        .comment-actions button:disabled {
+            cursor: not-allowed;
+            opacity: 0.55;
+        }
+
+/* Uređivanje i odgovaranje */
+
+.comment-edit-form,
+.comment-reply-form {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border-subtle);
+}
+
+/* Pododgovori */
+
+.comment-replies {
+    display: grid;
+    gap: 14px;
+    margin-top: 14px;
+    margin-left: 28px;
+    padding-left: 18px;
+    border-left: 2px solid var(--border-subtle);
+}
+
+.comment-replies-capped {
+    margin-left: 8px;
+}
+
+/* Poruke */
+
+.comment-error {
+    max-width: 680px;
+    margin: 16px 0;
+    padding: 11px 13px;
+    border-radius: 5px;
+    background-color: #fef2f2;
+    color: #b91c1c;
+    font-size: 13px;
+}
+
+.comment-login-message,
+.no-comments {
+    margin: 0;
+    color: var(--text-muted);
+    font-size: 14px;
+}
+
+/* Responsive komentari */
+
+@media (max-width: 700px) {
+    .comment-form {
+        padding: 14px;
+    }
+
+    .comment-meta {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .comment-replies {
+        margin-left: 12px;
+        padding-left: 10px;
+    }
+
+    .comment-form-footer,
+    .comment-reply-footer {
+        align-items: flex-end;
+    }
 }
 
 /* Materijal nije pronađen */
@@ -253,10 +676,11 @@
         padding: 45px 24px 70px;
     }
 
-    .study-tool {
-        align-items: flex-start;
+    .material-heading h1 {
+        font-size: 38px;
     }
 
+    .material-files-heading,
     .material-file-heading {
         align-items: flex-start;
         flex-direction: column;
@@ -274,5 +698,47 @@
 
     .pdf-preview {
         height: 450px;
+    }
+
+    .study-tool-row {
+        gap: 18px;
+    }
+
+    .study-tool-row > button {
+        min-width: auto;
+    }
+
+    .source-fields {
+        margin-left: 0;
+    }
+
+    .page-range {
+        grid-template-columns: 1fr;
+    }
+
+    .comment-meta {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 5px;
+    }
+}
+
+@media (max-width: 480px) {
+    .material-details-container {
+        padding-right: 18px;
+        padding-left: 18px;
+    }
+
+    .study-tool-row {
+        align-items: stretch;
+        flex-direction: column;
+    }
+
+    .study-tool-row > button {
+        width: 100%;
+    }
+
+    .comment-form-footer {
+        align-items: flex-end;
     }
 }

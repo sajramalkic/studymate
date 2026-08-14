@@ -13,5 +13,7 @@ export type Material = {
     author: string;
     pages: number;
     description: string;
+    uploaderUsername: string;
     files: MaterialFile[];
+
 };

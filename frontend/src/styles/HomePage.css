@@ -165,3 +165,25 @@
         grid-template-columns: 45px 1fr;
     }
 }
+
+.hero-primary-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 20px;
+    border: 1px solid var(--accent);
+    border-radius: 5px;
+    background: var(--accent);
+    color: white;
+    font: inherit;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+    .hero-primary-button:hover {
+        background: var(--accent-hover);
+        border-color: var(--accent-hover);
+    }

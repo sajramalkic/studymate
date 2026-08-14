@@ -10,6 +10,7 @@ import CreateMaterialPage from "./pages/CreateMaterialPage";
 import ProfilePage from "./pages/ProfilePage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import MyMaterialsPage from "./pages/MyMaterialsPage";
+import EditMaterialPage from "./pages/EditMaterialPage";
 
 function App() {
     return (
@@ -49,6 +50,14 @@ function App() {
                     element={
                         <ProtectedRoute>
                             <MyMaterialsPage />
+                        </ProtectedRoute>
+                    }
+                />
+                <Route
+                    path="/uredi-materijal/:id"
+                    element={
+                        <ProtectedRoute>
+                            <EditMaterialPage />
                         </ProtectedRoute>
                     }
                 />

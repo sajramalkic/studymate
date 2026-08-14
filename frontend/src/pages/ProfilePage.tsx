@@ -15,7 +15,7 @@ function ProfilePage() {
             await signOut();
             navigate("/");
         } catch {
-            // Možemo kasnije dodati posebnu poruku u UI.
+           
         }
     }
 
@@ -32,7 +32,7 @@ function ProfilePage() {
                     </p>
 
                     <h1>
-                        @{user.username}
+                        {user.username}
                     </h1>
                 </header>
 
@@ -46,7 +46,7 @@ function ProfilePage() {
                             </span>
 
                             <span className="profile-info-value">
-                                @{user.username}
+                                {user.username}
                             </span>
                         </div>
 
@@ -65,10 +65,7 @@ function ProfilePage() {
                 <section className="profile-section">
                     <h2>Materijali</h2>
 
-                    <p className="profile-section-description">
-                        Ovdje ćeš moći pregledati materijale
-                        koje si objavila.
-                    </p>
+                  
 
                     <button
                         type="button"

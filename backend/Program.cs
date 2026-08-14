@@ -2,16 +2,20 @@
 using Microsoft.EntityFrameworkCore;
 using StudyMate.Api.Data;
 using StudyMate.Api.Models;
+using StudyMate.Api.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
 var connectionString =
-    builder.Configuration.GetConnectionString("DefaultConnection")
+    builder.Configuration.GetConnectionString("StudyMateConnection")
     ?? throw new InvalidOperationException(
-        "Connection string 'DefaultConnection' nije pronađen."
+        "Connection string 'StudyMateConnection' nije pronađen."
     );
+Console.WriteLine(
+    "DATABASE: " + connectionString.Split(';')[0]
+);
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseNpgsql(connectionString)
@@ -52,8 +56,28 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Services.Configure<EmailSettings>(
+    builder.Configuration.GetSection("EmailSettings")
+);
+
+builder.Services.AddScoped<
+    IEmailService,
+    EmailService
+>();
+
+builder.Services.AddScoped<TextExtractionService>();
+
+builder.Services.AddScoped<StudySourceService>();
+
+builder.Services.AddHttpClient<GeminiQuestionService>();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddScoped<TextChunkingService>();
+builder.Services.AddHttpClient<GeminiSummaryService>();
+builder.Services.AddHttpClient<GeminiFlashcardService>();
+builder.Services.AddHttpClient<GeminiQuizService>();
+builder.Services.AddControllers();
 
 var app = builder.Build();
 

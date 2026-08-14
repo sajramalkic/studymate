@@ -162,3 +162,22 @@
         gap: 12px;
     }
 }
+.my-material-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.edit-material-button {
+    padding: 8px 12px;
+    border: 1px solid var(--border-strong);
+    border-radius: 3px;
+    color: var(--text-primary);
+    font-size: 13px;
+    font-weight: 500;
+}
+
+    .edit-material-button:hover {
+        border-color: var(--accent);
+        color: var(--accent);
+    }

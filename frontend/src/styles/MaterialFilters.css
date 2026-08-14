@@ -1,0 +1,108 @@
+.material-filters {
+    display: grid;
+    grid-template-columns: minmax(260px, 1fr) minmax(160px, 200px) minmax(180px, 230px);
+    gap: 16px;
+    align-items: end;
+    margin-top: 30px;
+    margin-bottom: 18px;
+}
+
+.material-search,
+.material-filter-field {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.material-filter-label {
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-secondary);
+}
+
+.material-search input,
+.material-filter-field select {
+    width: 100%;
+    min-height: 44px;
+    box-sizing: border-box;
+    padding: 10px 13px;
+    border: 1px solid var(--border-subtle);
+    border-radius: 6px;
+    background: var(--bg-surface);
+    color: var(--text-primary);
+    font: inherit;
+    font-size: 14px;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+    .material-search input:focus,
+    .material-filter-field select:focus {
+        outline: none;
+        border-color: var(--accent);
+        box-shadow: 0 0 0 2px rgba(40, 85, 62, 0.08);
+    }
+
+    .material-search input::placeholder {
+        color: var(--text-muted);
+    }
+
+.material-filter-field select {
+    cursor: pointer;
+}
+
+.material-filter-summary {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 32px;
+    margin-bottom: 16px;
+    color: var(--text-secondary);
+    font-size: 13px;
+}
+
+.clear-filters-button {
+    padding: 0;
+    border: 0;
+    background: transparent;
+    color: var(--accent);
+    font: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+    .clear-filters-button:hover {
+        text-decoration: underline;
+    }
+
+.filtered-empty {
+    margin-top: 20px;
+}
+
+@media (max-width: 800px) {
+    .material-filters {
+        grid-template-columns: 1fr 1fr;
+    }
+
+    .material-search {
+        grid-column: 1 / -1;
+    }
+}
+
+@media (max-width: 560px) {
+    .material-filters {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .material-search {
+        grid-column: auto;
+    }
+
+    .material-filter-summary {
+        align-items: flex-start;
+        gap: 12px;
+    }
+}

@@ -34,9 +34,7 @@ function Navbar() {
                     Biblioteka
                 </Link>
 
-                <Link to="/o-projektu">
-                    O projektu
-                </Link>
+              
 
                 {!loading && !user && (
                     <Link

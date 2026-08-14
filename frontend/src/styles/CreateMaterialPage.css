@@ -159,3 +159,34 @@
     .remove-file-button:hover {
         color: var(--text-primary);
     }
+
+.edit-files-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.edit-file-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border-subtle);
+}
+
+    .edit-file-row > div {
+        display: flex;
+        flex-direction: column;
+        gap: 3px;
+    }
+
+.edit-file-name {
+    color: var(--text-primary);
+    font-size: 13px;
+}
+
+.edit-file-size {
+    color: var(--text-muted);
+    font-size: 11px;
+}
