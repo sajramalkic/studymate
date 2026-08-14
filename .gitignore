@@ -20,3 +20,4 @@ backend/Uploads/
 .DS_Store
 Thumbs.db/docs/studymate-demo.mp4.mp4
 /docs/studymate-demo.mp4
+/docs/*.mp4
