@@ -6,7 +6,7 @@ StudyMate is a learning platform built for students who want to turn their own s
 
 A short walkthrough of the application is available here:
 
-[Watch the StudyMate demo](https://drive.google.com/drive/u/1/home)
+[Watch the StudyMate demo](https://drive.google.com/file/d/1Stghhj9Y6HoaGtlbUFJcmwHHrP63lCLK/view?usp=sharing)
 
 ## What StudyMate offers
 
