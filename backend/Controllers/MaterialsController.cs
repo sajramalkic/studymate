@@ -349,7 +349,10 @@ public class MaterialsController : ControllerBase
             return BadRequest("Vrsta materijala je obavezna.");
         }
 
-        if (request.Pages <= 0)
+        if (
+      request.Pages.HasValue &&
+      request.Pages.Value <= 0
+  )
         {
             return BadRequest(
                 "Broj stranica mora biti pozitivan cijeli broj."
@@ -536,7 +539,10 @@ public class MaterialsController : ControllerBase
             );
         }
 
-        if (request.Pages <= 0)
+        if (
+        request.Pages.HasValue &&
+        request.Pages.Value <= 0
+    )
         {
             return BadRequest(
                 "Broj stranica mora biti pozitivan cijeli broj."

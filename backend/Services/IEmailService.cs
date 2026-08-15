@@ -7,4 +7,11 @@ public interface IEmailService
         string? username,
         CancellationToken cancellationToken = default
     );
+
+    Task SendEmailConfirmationAsync(
+        string recipientEmail,
+        string? username,
+        string confirmationLink,
+        CancellationToken cancellationToken = default
+    );
 }

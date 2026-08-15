@@ -31,9 +31,18 @@ function CreateMaterialPage() {
             return;
         }
 
-        const pageCount = Number(pages);
+        const pageCount =
+            pages.trim() === ""
+                ? null
+                : Number(pages);
 
-        if (!Number.isInteger(pageCount) || pageCount <= 0) {
+        if (
+            pageCount !== null &&
+            (
+                !Number.isInteger(pageCount) ||
+                pageCount <= 0
+            )
+        ) {
             setError(
                 "Broj stranica mora biti pozitivan cijeli broj."
             );

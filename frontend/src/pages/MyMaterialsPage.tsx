@@ -460,16 +460,16 @@ function MyMaterialsPage() {
                                                             }
                                                         </span>
 
-                                                        <span>
-                                                            ·
-                                                        </span>
+                                                        {material.pages !== null &&
+                                                            material.pages !== undefined && (
+                                                                <>
+                                                                    <span>·</span>
 
-                                                        <span>
-                                                            {
-                                                                material.pages
-                                                            }{" "}
-                                                            stranica
-                                                        </span>
+                                                                    <span>
+                                                                        {material.pages} stranica
+                                                                    </span>
+                                                                </>
+                                                            )}
 
                                                         <span>
                                                             ·

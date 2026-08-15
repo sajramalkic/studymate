@@ -1,5 +1,9 @@
 ﻿import { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import {
+Link,
+    useLocation,
+    useParams,
+} from "react-router-dom"; 
 
 import type { Material } from "../types/Material";
 
@@ -17,6 +21,20 @@ import CommentSection
 
 function MaterialDetailsPage() {
     const { id } = useParams();
+
+    const location = useLocation();
+
+    const fromMyMaterials =
+        location.state?.from ===
+        "moji-materijali";
+
+    const backPath = fromMyMaterials
+        ? "/moji-materijali"
+        : "/biblioteka";
+
+    const backLabel = fromMyMaterials
+        ? "Moji materijali"
+        : "Biblioteka";
 
     const [material, setMaterial] =
         useState<Material | null>(null);
@@ -106,12 +124,7 @@ function MaterialDetailsPage() {
     return (
         <main className="material-details-page">
             <div className="material-details-container">
-                <Link
-                    to="/biblioteka"
-                    className="back-link"
-                >
-                    ← Biblioteka
-                </Link>
+             
 
                 <section className="material-heading">
                     <p className="material-details-subject">
@@ -131,11 +144,16 @@ function MaterialDetailsPage() {
                             {material.type}
                         </span>
 
-                        <span>·</span>
+                        {material.pages !== null &&
+                            material.pages !== undefined && (
+                                <>
+                                    <span>·</span>
 
-                        <span>
-                            {material.pages} stranica
-                        </span>
+                                    <span>
+                                        {material.pages} stranica
+                                    </span>
+                                </>
+                            )}
 
                         {material.author && (
                             <>

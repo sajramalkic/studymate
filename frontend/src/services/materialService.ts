@@ -35,7 +35,7 @@ export type CreateMaterialRequest = {
     subject: string;
     type: string;
     author: string;
-    pages: number;
+    pages: number | null;
     description: string;
     files: File[];
 };
@@ -168,7 +168,7 @@ export type UpdateMaterialRequest = {
     title: string;
     subject: string;
     type: string;
-    pages: number;
+    pages: number | null;
     author: string;
     description: string;
 };

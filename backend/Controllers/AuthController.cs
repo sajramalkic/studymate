@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Text;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using StudyMate.Api.Dtos;
 using StudyMate.Api.Models;
 using StudyMate.Api.Services;
@@ -13,10 +15,18 @@ namespace StudyMate.Api.Controllers;
 [Route("api/auth")]
 public class AuthController : ControllerBase
 {
-    private readonly UserManager<ApplicationUser> _userManager;
-    private readonly SignInManager<ApplicationUser> _signInManager;
-    private readonly IEmailService _emailService;
-    private readonly ILogger<AuthController> _logger;
+    private readonly UserManager<ApplicationUser>
+        _userManager;
+
+    private readonly SignInManager<ApplicationUser>
+        _signInManager;
+
+    private readonly IEmailService
+        _emailService;
+
+    private readonly ILogger<AuthController>
+        _logger;
+
     public AuthController(
         UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
@@ -34,14 +44,21 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> Register(
         RegisterRequest request)
     {
-        var username = request.Username.Trim();
-        var email = request.Email.Trim().ToLowerInvariant();
+        var username =
+            request.Username?.Trim() ?? "";
+
+        var email =
+            request.Email?
+                .Trim()
+                .ToLowerInvariant()
+            ?? "";
 
         if (string.IsNullOrWhiteSpace(username))
         {
             return BadRequest(new
             {
-                message = "Korisničko ime je obavezno."
+                message =
+                    "Korisničko ime je obavezno."
             });
         }
 
@@ -61,30 +78,36 @@ public class AuthController : ControllerBase
         {
             return BadRequest(new
             {
-                message = "Email je obavezan."
+                message =
+                    "Email je obavezan."
             });
         }
 
-        var emailValidator = new EmailAddressAttribute();
+        var emailValidator =
+            new EmailAddressAttribute();
 
         if (!emailValidator.IsValid(email))
         {
             return BadRequest(new
             {
-                message = "Unesi ispravan email."
+                message =
+                    "Unesi ispravan email."
             });
         }
 
-        if (string.IsNullOrWhiteSpace(request.Password))
+        if (string.IsNullOrWhiteSpace(
+                request.Password))
         {
             return BadRequest(new
             {
-                message = "Lozinka je obavezna."
+                message =
+                    "Lozinka je obavezna."
             });
         }
 
         var existingUsername =
-            await _userManager.FindByNameAsync(username);
+            await _userManager
+                .FindByNameAsync(username);
 
         if (existingUsername != null)
         {
@@ -96,7 +119,8 @@ public class AuthController : ControllerBase
         }
 
         var existingEmail =
-            await _userManager.FindByEmailAsync(email);
+            await _userManager
+                .FindByEmailAsync(email);
 
         if (existingEmail != null)
         {
@@ -110,7 +134,9 @@ public class AuthController : ControllerBase
         var user = new ApplicationUser
         {
             UserName = username,
-            Email = email
+            Email = email,
+
+            EmailConfirmed = false
         };
 
         var result =
@@ -121,10 +147,16 @@ public class AuthController : ControllerBase
 
         if (!result.Succeeded)
         {
-            var errors = result.Errors
-                .Select(error => TranslateIdentityError(error.Code))
-                .Distinct()
-                .ToArray();
+            var errors =
+                result.Errors
+                    .Select(
+                        error =>
+                            TranslateIdentityError(
+                                error.Code
+                            )
+                    )
+                    .Distinct()
+                    .ToArray();
 
             return BadRequest(new
             {
@@ -132,9 +164,204 @@ public class AuthController : ControllerBase
             });
         }
 
+        try
+        {
+            await SendConfirmationEmailAsync(
+                user,
+                HttpContext.RequestAborted
+            );
+        }
+        catch (Exception exception)
+        {
+            _logger.LogError(
+                exception,
+                "Nije moguće poslati email potvrde za korisnika {UserId}.",
+                user.Id
+            );
+
+            return StatusCode(
+                StatusCodes
+                    .Status500InternalServerError,
+                new
+                {
+                    message =
+                        "Račun je kreiran, ali email za potvrdu nije moguće poslati. Pokušaj ponovo poslati potvrdu."
+                }
+            );
+        }
+
         return Ok(new
         {
-            message = "Registracija je uspješna."
+            message =
+                "Registracija je uspješna. Provjeri svoj email i potvrdi račun prije prijave."
+        });
+    }
+
+    // GET: api/auth/confirm-email
+    [HttpGet("confirm-email")]
+    public async Task<IActionResult> ConfirmEmail(
+        [FromQuery] string userId,
+        [FromQuery] string token)
+    {
+        if (
+            string.IsNullOrWhiteSpace(userId) ||
+            string.IsNullOrWhiteSpace(token)
+        )
+        {
+            return BadRequest(
+                "Link za potvrdu nije ispravan."
+            );
+        }
+
+        var user =
+            await _userManager
+                .FindByIdAsync(userId);
+
+        if (user == null)
+        {
+            return BadRequest(
+                "Korisnik nije pronađen."
+            );
+        }
+
+        if (user.EmailConfirmed)
+        {
+            return Content(
+                CreateConfirmationPage(
+                    "Email je već potvrđen.",
+                    true
+                ),
+                "text/html"
+            );
+        }
+
+        string decodedToken;
+
+        try
+        {
+            var tokenBytes =
+                WebEncoders
+                    .Base64UrlDecode(token);
+
+            decodedToken =
+                Encoding.UTF8
+                    .GetString(tokenBytes);
+        }
+        catch
+        {
+            return Content(
+                CreateConfirmationPage(
+                    "Link za potvrdu nije ispravan.",
+                    false
+                ),
+                "text/html"
+            );
+        }
+
+        var result =
+            await _userManager
+                .ConfirmEmailAsync(
+                    user,
+                    decodedToken
+                );
+
+        if (!result.Succeeded)
+        {
+            return Content(
+                CreateConfirmationPage(
+                    "Potvrda emaila nije uspjela. Link je možda istekao ili nije ispravan.",
+                    false
+                ),
+                "text/html"
+            );
+        }
+
+        return Content(
+            CreateConfirmationPage(
+                "Email je uspješno potvrđen. Sada se možeš prijaviti na StudyMate.",
+                true
+            ),
+            "text/html"
+        );
+    }
+
+    // POST: api/auth/resend-confirmation
+    [HttpPost("resend-confirmation")]
+    public async Task<IActionResult>
+        ResendConfirmation(
+            ResendConfirmationRequest request)
+    {
+        var email =
+            request.Email?
+                .Trim()
+                .ToLowerInvariant()
+            ?? "";
+
+        if (string.IsNullOrWhiteSpace(email))
+        {
+            return BadRequest(new
+            {
+                message =
+                    "Email je obavezan."
+            });
+        }
+
+        var user =
+            await _userManager
+                .FindByEmailAsync(email);
+
+        /*
+         * Ne otkrivamo da li račun
+         * postoji zbog sigurnosti.
+         */
+        if (user == null)
+        {
+            return Ok(new
+            {
+                message =
+                    "Ako račun postoji, email za potvrdu je poslan."
+            });
+        }
+
+        if (user.EmailConfirmed)
+        {
+            return Ok(new
+            {
+                message =
+                    "Ovaj email je već potvrđen."
+            });
+        }
+
+        try
+        {
+            await SendConfirmationEmailAsync(
+                user,
+                HttpContext.RequestAborted
+            );
+        }
+        catch (Exception exception)
+        {
+            _logger.LogError(
+                exception,
+                "Nije moguće ponovo poslati email potvrde za korisnika {UserId}.",
+                user.Id
+            );
+
+            return StatusCode(
+                StatusCodes
+                    .Status500InternalServerError,
+                new
+                {
+                    message =
+                        "Email za potvrdu trenutno nije moguće poslati."
+                }
+            );
+        }
+
+        return Ok(new
+        {
+            message =
+                "Email za potvrdu je ponovo poslan."
         });
     }
 
@@ -144,19 +371,28 @@ public class AuthController : ControllerBase
         LoginRequest request)
     {
         var email =
-            request.Email.Trim().ToLowerInvariant();
+            request.Email?
+                .Trim()
+                .ToLowerInvariant()
+            ?? "";
 
-        if (string.IsNullOrWhiteSpace(email) ||
-            string.IsNullOrWhiteSpace(request.Password))
+        if (
+            string.IsNullOrWhiteSpace(email) ||
+            string.IsNullOrWhiteSpace(
+                request.Password
+            )
+        )
         {
             return BadRequest(new
             {
-                message = "Unesi email i lozinku."
+                message =
+                    "Unesi email i lozinku."
             });
         }
 
         var user =
-            await _userManager.FindByEmailAsync(email);
+            await _userManager
+                .FindByEmailAsync(email);
 
         if (user == null)
         {
@@ -167,13 +403,31 @@ public class AuthController : ControllerBase
             });
         }
 
-        var result =
-            await _signInManager.PasswordSignInAsync(
-                user,
-                request.Password,
-                isPersistent: false,
-                lockoutOnFailure: false
+        /*
+         * NOVO:
+         * korisnik se ne smije prijaviti
+         * dok ne potvrdi email.
+         */
+        if (!user.EmailConfirmed)
+        {
+            return StatusCode(
+                StatusCodes.Status403Forbidden,
+                new
+                {
+                    message =
+                        "Email adresa nije potvrđena. Provjeri svoj email."
+                }
             );
+        }
+
+        var result =
+            await _signInManager
+                .PasswordSignInAsync(
+                    user,
+                    request.Password,
+                    isPersistent: false,
+                    lockoutOnFailure: false
+                );
 
         if (!result.Succeeded)
         {
@@ -183,7 +437,13 @@ public class AuthController : ControllerBase
                     "Email ili lozinka nisu ispravni."
             });
         }
-        if (!string.IsNullOrWhiteSpace(user.Email))
+
+        /*
+         * Postojeća email obavijest
+         * o uspješnom loginu ostaje.
+         */
+        if (!string.IsNullOrWhiteSpace(
+                user.Email))
         {
             try
             {
@@ -191,7 +451,8 @@ public class AuthController : ControllerBase
                     .SendLoginNotificationAsync(
                         user.Email,
                         user.UserName,
-                        HttpContext.RequestAborted
+                        HttpContext
+                            .RequestAborted
                     );
             }
             catch (Exception exception)
@@ -206,8 +467,14 @@ public class AuthController : ControllerBase
 
         return Ok(new
         {
-            username = user.UserName,
-            email = user.Email
+            username =
+                user.UserName,
+
+            email =
+                user.Email,
+
+            emailConfirmed =
+                user.EmailConfirmed
         });
     }
 
@@ -217,7 +484,8 @@ public class AuthController : ControllerBase
     public async Task<IActionResult> Me()
     {
         var user =
-            await _userManager.GetUserAsync(User);
+            await _userManager
+                .GetUserAsync(User);
 
         if (user == null)
         {
@@ -226,8 +494,14 @@ public class AuthController : ControllerBase
 
         return Ok(new
         {
-            username = user.UserName,
-            email = user.Email
+            username =
+                user.UserName,
+
+            email =
+                user.Email,
+
+            emailConfirmed =
+                user.EmailConfirmed
         });
     }
 
@@ -236,12 +510,143 @@ public class AuthController : ControllerBase
     [HttpPost("logout")]
     public async Task<IActionResult> Logout()
     {
-        await _signInManager.SignOutAsync();
+        await _signInManager
+            .SignOutAsync();
 
         return Ok(new
         {
-            message = "Odjava je uspješna."
+            message =
+                "Odjava je uspješna."
         });
+    }
+
+    private async Task
+        SendConfirmationEmailAsync(
+            ApplicationUser user,
+            CancellationToken cancellationToken)
+    {
+        if (string.IsNullOrWhiteSpace(
+                user.Email))
+        {
+            throw new InvalidOperationException(
+                "Korisnik nema email adresu."
+            );
+        }
+
+        var token =
+            await _userManager
+                .GenerateEmailConfirmationTokenAsync(
+                    user
+                );
+
+        var encodedToken =
+            WebEncoders.Base64UrlEncode(
+                Encoding.UTF8
+                    .GetBytes(token)
+            );
+
+        var confirmationLink =
+            $"{Request.Scheme}://" +
+            $"{Request.Host}" +
+            "/api/auth/confirm-email" +
+            $"?userId={Uri.EscapeDataString(user.Id)}" +
+            $"&token={Uri.EscapeDataString(encodedToken)}";
+
+        await _emailService
+            .SendEmailConfirmationAsync(
+                user.Email,
+                user.UserName,
+                confirmationLink,
+                cancellationToken
+            );
+    }
+
+    private static string CreateConfirmationPage(
+        string message,
+        bool success)
+    {
+        var title =
+            success
+                ? "Email potvrđen"
+                : "Potvrda nije uspjela";
+
+        var symbol =
+            success
+                ? "✓"
+                : "!";
+
+        return $"""
+            <!DOCTYPE html>
+            <html lang="bs">
+            <head>
+                <meta charset="UTF-8" />
+
+                <meta
+                    name="viewport"
+                    content="width=device-width, initial-scale=1.0"
+                />
+
+                <title>{title}</title>
+            </head>
+
+            <body
+                style="
+                    font-family: Arial, sans-serif;
+                    background: #f7f7f5;
+                    margin: 0;
+                    padding: 40px 20px;
+                "
+            >
+                <div
+                    style="
+                        max-width: 520px;
+                        margin: 80px auto;
+                        background: white;
+                        padding: 40px;
+                        border-radius: 12px;
+                        text-align: center;
+                    "
+                >
+                    <div
+                        style="
+                            font-size: 42px;
+                            margin-bottom: 20px;
+                        "
+                    >
+                        {symbol}
+                    </div>
+
+                    <h1>
+                        {title}
+                    </h1>
+
+                    <p
+                        style="
+                            line-height: 1.6;
+                            color: #555;
+                        "
+                    >
+                        {message}
+                    </p>
+
+                    <a
+                        href="http://localhost:5173"
+                        style="
+                            display: inline-block;
+                            margin-top: 20px;
+                            padding: 12px 20px;
+                            background: #285f4d;
+                            color: white;
+                            text-decoration: none;
+                            border-radius: 6px;
+                        "
+                    >
+                        Otvori StudyMate
+                    </a>
+                </div>
+            </body>
+            </html>
+            """;
     }
 
     private static string TranslateIdentityError(

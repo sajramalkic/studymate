@@ -10,7 +10,7 @@ public class CreateMaterialRequest
 
     public string? Author { get; set; }
 
-    public int Pages { get; set; }
+    public int? Pages { get; set; }
 
     public string? Description { get; set; }
 

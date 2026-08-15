@@ -68,9 +68,9 @@ function EditMaterialPage() {
                 setSubject(material.subject);
                 setType(material.type);
 
-                setPages(
-                    material.pages.toString()
-                );
+               setPages(
+    material.pages?.toString() ?? ""
+);
 
                 setAuthor(
                     material.author ?? ""
@@ -112,16 +112,22 @@ function EditMaterialPage() {
             return;
         }
 
-        const pageCount = Number(pages);
+
+        const pageCount =
+            pages.trim() === ""
+                ? null
+                : Number(pages);
 
         if (
-            !Number.isInteger(pageCount) ||
-            pageCount <= 0
+            pageCount !== null &&
+            (
+                !Number.isInteger(pageCount) ||
+                pageCount <= 0
+            )
         ) {
             setError(
                 "Broj stranica mora biti pozitivan cijeli broj."
             );
-
             return;
         }
 
@@ -129,33 +135,26 @@ function EditMaterialPage() {
             setSubmitting(true);
             setError("");
 
-            const updatedMaterial =
-                await updateMaterial(
-                    Number(id),
-                    {
-                        title: title.trim(),
-                        subject:
-                            subject.trim(),
-                        type,
-                        pages: pageCount,
-                        author:
-                            author.trim(),
-                        description:
-                            description.trim(),
-                    }
-                );
+            await updateMaterial(Number(id), {
+                title: title.trim(),
+                subject: subject.trim(),
+                type,
+                author: author.trim(),
+                pages: pageCount,
+                description: description.trim(),
+            });
 
-            navigate(
-                `/materijal/${updatedMaterial.id}`
-            );
+            navigate(`/materijal/${id}`, {
+                state: {
+                    from: "moji-materijali",
+                },
+            });
         } catch (error) {
-            if (error instanceof Error) {
-                setError(error.message);
-            } else {
-                setError(
-                    "Nije moguće urediti materijal."
-                );
-            }
+            setError(
+                error instanceof Error
+                    ? error.message
+                    : "Nije moguće sačuvati izmjene."
+            );
         } finally {
             setSubmitting(false);
         }
