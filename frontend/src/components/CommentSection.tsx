@@ -262,7 +262,7 @@ function CommentSection({
                 </p>
             ) : !isAuthenticated ? (
                 <p className="comment-login-message">
-                    Prijavi se da bi ostavila komentar.
+                    Prijavi se da bi ostavio/la komentar.
                 </p>
             ) : (
                 <>
